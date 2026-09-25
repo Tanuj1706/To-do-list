@@ -324,6 +324,12 @@ html, body {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
+.command-bar-main {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .command-bar-brand {
   display: flex;
   align-items: center;
@@ -340,6 +346,7 @@ html, body {
   justify-content: center;
   color: #000;
   box-shadow: 0 0 14px var(--hazard-glow);
+  flex-shrink: 0;
 }
 
 .brand-titles h1 {
@@ -362,6 +369,14 @@ html, body {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+}
+
+.mobile-user-badge {
+  display: none;
+}
+
+.desktop-user-badge {
+  display: flex;
 }
 
 /* Buttons */
@@ -528,21 +543,39 @@ html, body {
   color: #94a3b8;
 }
 
+.metric-label {
+  font-size: 0.74rem;
+}
+
 .metric-pill strong {
   font-size: 0.95rem;
   color: #fff;
+}
+
+.form-grid-dual {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
 /* ========================================================
    MOBILE COLUMN QUICK SWITCHER
    ======================================================== */
 
-.mobile-column-tabs {
+.mobile-column-tabs-wrapper {
   display: none;
-  gap: 0.4rem;
+  position: relative;
+  width: 100%;
+}
+
+.mobile-column-tabs {
+  display: flex;
+  gap: 0.45rem;
   overflow-x: auto;
-  padding-bottom: 0.25rem;
+  padding: 0.25rem 0.2rem 0.5rem;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
 }
 
 .mobile-column-tabs::-webkit-scrollbar {
@@ -551,7 +584,7 @@ html, body {
 
 .mobile-tab-btn {
   white-space: nowrap;
-  padding: 0.5rem 0.9rem;
+  padding: 0.5rem 0.85rem;
   background: #11141c;
   border: 1px solid var(--border-industrial);
   border-radius: 6px;
@@ -563,17 +596,28 @@ html, body {
   align-items: center;
   gap: 0.45rem;
   cursor: pointer;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  transition: all 0.15s ease;
+}
+
+.mobile-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
 }
 
 .mobile-tab-btn.active {
   background: #1e2430;
   color: #fff;
   border-color: var(--hazard-yellow);
+  box-shadow: 0 0 10px rgba(229, 149, 0, 0.25);
 }
 
 .mobile-tab-btn.active-urgent {
+  background: rgba(239, 68, 68, 0.2);
   border-color: #ef4444;
   color: #fca5a5;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.25);
 }
 
 /* ========================================================
@@ -1137,32 +1181,7 @@ html, body {
   margin-top: 0.2rem;
 }
 
-/* ========================================================
-   RESPONSIVE MEDIA QUERIES
-   ======================================================== */
 
-@media (max-width: 1200px) {
-  .kanban-board-container {
-    grid-template-columns: repeat(5, 300px);
-  }
-}
-
-@media (max-width: 900px) {
-  .command-bar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .command-actions {
-    justify-content: space-between;
-  }
-  .filter-deck {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .search-box-wrapper {
-    max-width: 100%;
-  }
-}
 
 /* ========================================================
    CARD PLACEMENT INDICATORS & TIMESTAMPS
@@ -1331,26 +1350,322 @@ html, body {
   background: #f59e0b;
 }
 
-@media (max-width: 640px) {
-  .main-content {
-    padding: 0.75rem;
-  }
-  .mobile-column-tabs {
-    display: flex;
-  }
+/* ========================================================
+   UNIVERSAL RESPONSIVE DESIGN SYSTEM
+   Supports: iPhone SE, iPhone 14/15 Pro, Pixel 7/8/9 Pro,
+   Samsung Galaxy, iPad Mini/Air/Pro, Laptops & 4K Ultrawides
+   ======================================================== */
+
+/* 1. Laptops & Compact Desktops (1025px - 1366px) */
+@media (max-width: 1366px) {
   .kanban-board-container {
+    grid-template-columns: repeat(5, minmax(240px, 1fr));
+    gap: 0.85rem;
+  }
+}
+
+/* 2. Tablets & Small Laptops (769px - 1024px) */
+@media (max-width: 1024px) {
+  .main-content {
+    padding: 1rem 1.25rem 2rem;
+  }
+
+  .command-bar {
+    padding: 0.75rem 1rem;
+    gap: 1rem;
+  }
+
+  .kanban-board-container {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(280px, 320px));
+    gap: 0.85rem;
+    overflow-x: auto;
+    padding-bottom: 1.25rem;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+  }
+
+  .kanban-column {
+    scroll-snap-align: start;
+  }
+
+  .filter-deck {
+    gap: 0.75rem;
+  }
+}
+
+/* 3. Phablets & Mobile Phones (< 768px) */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 0.65rem 0.65rem 2rem;
+    gap: 0.75rem;
+  }
+
+  /* Command Bar Header */
+  .command-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    padding: 0.75rem 0.85rem;
+  }
+
+  .command-bar-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .brand-titles h1 {
+    font-size: 1rem;
+  }
+
+  .brand-titles .brand-subtitle {
+    font-size: 0.65rem;
+  }
+
+  .brand-icon-box {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* Mobile User Badge in Top Row */
+  .mobile-user-badge {
+    display: flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    max-width: 160px;
+  }
+
+  .mobile-user-badge .user-email-text {
+    font-size: 0.72rem;
+    max-width: 85px;
+  }
+
+  .desktop-user-badge {
+    display: none !important;
+  }
+
+  /* Full Width Action Buttons Grid */
+  .command-actions {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .command-actions .btn-tactical {
+    width: 100%;
+    justify-content: center;
+    padding: 0.6rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  /* Filter Deck */
+  .filter-deck {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+    padding: 0.65rem 0.75rem;
+  }
+
+  .search-box-wrapper {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .search-input {
+    font-size: 16px; /* Prevents iOS Safari auto-zoom on focus */
+    padding: 0.55rem 0.75rem 0.55rem 2.2rem;
+  }
+
+  .priority-filter-chips {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.35rem;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    gap: 0.4rem;
+  }
+
+  .priority-filter-chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-chip {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    font-size: 0.73rem;
+    padding: 0.35rem 0.65rem;
+    white-space: nowrap;
+  }
+
+  /* 3-Column Metrics Micro Dashboard */
+  .stats-meter {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.35rem;
+    width: 100%;
+    padding-top: 0.45rem;
+    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+  }
+
+  .metric-pill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 0.35rem 0.25rem;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .metric-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.75;
+  }
+
+  .metric-pill strong {
+    font-size: 0.85rem;
+  }
+
+  /* Mobile Column Switcher Tab Strip */
+  .mobile-column-tabs-wrapper {
     display: block;
   }
+
+  .mobile-column-tabs {
+    display: flex;
+    gap: 0.45rem;
+    overflow-x: auto;
+    padding: 0.25rem 0.2rem 0.5rem;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+
+  .mobile-column-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-tab-btn {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    white-space: nowrap;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.74rem;
+  }
+
+  /* Kanban Single Column Mobile Presentation */
+  .kanban-board-container {
+    display: block;
+    width: 100%;
+    padding-bottom: 2rem;
+  }
+
   .kanban-column {
     display: none;
+    width: 100%;
+    min-height: calc(100vh - 380px);
     max-height: none;
-    min-height: 480px;
   }
+
   .kanban-column.mobile-active-column {
     display: flex;
   }
+
   .mobile-move-strip {
     display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .mobile-move-btn {
+    flex: 1;
+    min-width: 70px;
+    text-align: center;
+    padding: 0.35rem 0.4rem;
+    font-size: 0.72rem;
+  }
+
+  /* Modal Mobile Presentation (Bottom Sheet) */
+  .modal-backdrop {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal-hud-card {
+    width: 100%;
+    max-width: 100%;
+    max-height: 92vh;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-body {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    flex: 1;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .form-grid-dual {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .form-input, .form-textarea, .form-select {
+    font-size: 16px; /* Stop iOS Safari auto-zoom */
+    padding: 0.65rem 0.75rem;
+  }
+
+  /* Audit Trail Drawer Full Width */
+  .audit-drawer-panel {
+    width: 100vw;
+    max-width: 100vw;
+  }
+
+  .audit-drawer-header {
+    padding: 1rem;
+  }
+
+  .audit-feed {
+    padding: 1rem;
+  }
+
+  /* Login Gate on Small Screens */
+  .login-gate-card {
+    padding: 1.35rem 1rem;
+    width: 100%;
+  }
+
+  .login-telemetry-strip {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+}
+
+/* 4. Compact Smartphones (iPhone SE, Galaxy Mini < 380px) */
+@media (max-width: 380px) {
+  .brand-titles h1 {
+    font-size: 0.88rem;
+  }
+
+  .command-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .mobile-tab-btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.7rem;
   }
 }
 

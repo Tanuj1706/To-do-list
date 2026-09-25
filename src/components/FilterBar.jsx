@@ -76,41 +76,43 @@ export default function FilterBar({
         {/* Live Metrics Meter */}
         <div className="stats-meter">
           <div className="metric-pill">
-            <span>Total:</span>
+            <span className="metric-label">Total:</span>
             <strong>{totalTasks}</strong>
           </div>
           <div className="metric-pill">
-            <span style={{ color: '#f87171' }}>High Priority:</span>
+            <span className="metric-label" style={{ color: '#f87171' }}>Urgent:</span>
             <strong style={{ color: '#f87171' }}>{urgentCount}</strong>
           </div>
           <div className="metric-pill">
-            <span style={{ color: '#4ade80' }}>Completed:</span>
+            <span className="metric-label" style={{ color: '#4ade80' }}>Done:</span>
             <strong style={{ color: '#4ade80' }}>{completedCount} ({completionRate}%)</strong>
           </div>
         </div>
       </div>
 
-      {/* Mobile Column Switcher (Visible on Phones < 640px) */}
-      <div className="mobile-column-tabs">
-        {COLUMN_CONFIG.map(col => {
-          const count = tasks.filter(t => t.status === col.id).length;
-          const isUrgent = col.id === 'urgent';
-          const isActive = activeMobileColumn === col.id;
+      {/* Mobile Column Switcher (Visible on Screens < 768px) */}
+      <div className="mobile-column-tabs-wrapper">
+        <div className="mobile-column-tabs">
+          {COLUMN_CONFIG.map(col => {
+            const count = tasks.filter(t => t.status === col.id).length;
+            const isUrgent = col.id === 'urgent';
+            const isActive = activeMobileColumn === col.id;
 
-          return (
-            <button
-              key={col.id}
-              type="button"
-              className={`mobile-tab-btn ${isActive ? (isUrgent ? 'active-urgent' : 'active') : ''}`}
-              onClick={() => setActiveMobileColumn(col.id)}
-            >
-              <span>{col.title}</span>
-              <span className="column-badge" style={{ padding: '0.1rem 0.35rem' }}>
-                {count}
-              </span>
-            </button>
-          );
-        })}
+            return (
+              <button
+                key={col.id}
+                type="button"
+                className={`mobile-tab-btn ${isActive ? (isUrgent ? 'active-urgent' : 'active') : ''}`}
+                onClick={() => setActiveMobileColumn(col.id)}
+              >
+                <span>{col.title}</span>
+                <span className="column-badge">
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
     </>
   );
